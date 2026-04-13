@@ -1,0 +1,185 @@
+/* ── Reset ───────────────────────────────────────────────────────────────── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  background: #f0f4f8;
+  color: #2d3748;
+  min-height: 100vh;
+}
+
+/* ── Layout ──────────────────────────────────────────────────────────────── */
+.container { max-width: 1100px; margin: 0 auto; padding: 24px 20px; }
+
+/* ── Navbar ──────────────────────────────────────────────────────────────── */
+.navbar {
+  background: linear-gradient(90deg, #00695c, #00897b);
+  color: white;
+  padding: 14px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,.25);
+  position: sticky; top: 0; z-index: 100;
+}
+.navbar h1      { font-size: 1.1rem; font-weight: 700; }
+.navbar .nav-info { display: flex; align-items: center; gap: 12px; }
+.navbar .nav-name { font-size: .9rem; opacity: .9; }
+
+.role-badge { padding: 3px 10px; border-radius: 20px; font-size: .75rem; font-weight: 700; text-transform: uppercase; }
+.role-admin          { background: #e53935; color: white; }
+.role-receptionist   { background: #1565c0; color: white; }
+.role-doctor         { background: #2e7d32; color: white; }
+
+/* ── Tabs ────────────────────────────────────────────────────────────────── */
+.page-tabs {
+  background: white;
+  padding: 0 24px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.06);
+  position: sticky; top: 53px; z-index: 90;
+  display: flex;
+}
+.page-tab {
+  padding: 13px 20px;
+  border: none;
+  border-bottom: 3px solid transparent;
+  background: none;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: .875rem;
+  color: #718096;
+  transition: all .15s;
+}
+.page-tab.active { border-bottom-color: #00897b; color: #00695c; }
+.page-tab:hover:not(.active) { color: #00695c; background: #f0fdf4; }
+
+/* ── Buttons ─────────────────────────────────────────────────────────────── */
+.btn {
+  padding: 9px 18px; border: none; border-radius: 7px;
+  cursor: pointer; font-size: .875rem; font-weight: 600;
+  transition: opacity .15s, transform .1s;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.btn:hover:not(:disabled)  { opacity: .87; transform: translateY(-1px); }
+.btn:active:not(:disabled) { transform: translateY(0); }
+.btn:disabled              { opacity: .55; cursor: not-allowed; }
+.btn-primary   { background: #00897b; color: white; }
+.btn-success   { background: #2e7d32; color: white; }
+.btn-danger    { background: #c62828; color: white; }
+.btn-secondary { background: #546e7a; color: white; }
+.btn-warning   { background: #f57c00; color: white; }
+.btn-sm        { padding: 5px 12px; font-size: .8rem; }
+.btn-full      { width: 100%; justify-content: center; padding: 12px; }
+.btn-logout    { background: rgba(255,255,255,.18); color: white; border: 1px solid rgba(255,255,255,.35); }
+
+/* ── Cards ───────────────────────────────────────────────────────────────── */
+.card {
+  background: white; border-radius: 12px; padding: 24px;
+  box-shadow: 0 2px 10px rgba(0,0,0,.07); margin-bottom: 20px;
+}
+.card h2 {
+  font-size: 1.05rem; color: #00695c;
+  padding-bottom: 12px; margin-bottom: 16px;
+  border-bottom: 2px solid #e0f2f1;
+  display: flex; align-items: center; gap: 8px;
+}
+
+/* ── Login ───────────────────────────────────────────────────────────────── */
+.login-wrapper {
+  min-height: 100vh; display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, #004d40 0%, #00695c 50%, #00897b 100%);
+}
+.login-card {
+  background: white; padding: 40px 36px; border-radius: 16px;
+  width: 390px; box-shadow: 0 16px 48px rgba(0,0,0,.35);
+}
+.login-card .logo    { text-align: center; font-size: 2.5rem; margin-bottom: 8px; }
+.login-card h1       { text-align: center; color: #00695c; font-size: 1.5rem; margin-bottom: 4px; }
+.login-card .tagline { text-align: center; color: #777; font-size: .82rem; margin-bottom: 28px; }
+.divider             { border: none; border-top: 1px solid #eee; margin: 20px 0; }
+.demo-label          { text-align: center; font-size: .78rem; color: #aaa; margin-bottom: 10px; }
+.demo-btns           { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+
+/* ── Forms ───────────────────────────────────────────────────────────────── */
+.form-group        { margin-bottom: 14px; }
+.form-group label  { display: block; margin-bottom: 5px; font-weight: 600; font-size: .85rem; color: #4a5568; }
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%; padding: 10px 12px;
+  border: 1.5px solid #e2e8f0; border-radius: 7px;
+  font-size: .9rem; outline: none;
+  transition: border-color .2s, box-shadow .2s; background: #fafafa;
+}
+.form-group input:focus,
+.form-group select:focus { border-color: #00897b; box-shadow: 0 0 0 3px rgba(0,137,123,.12); background: white; }
+.form-row   { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+/* ── Tables ──────────────────────────────────────────────────────────────── */
+.table-wrap { overflow-x: auto; }
+table  { width: 100%; border-collapse: collapse; font-size: .875rem; }
+th {
+  background: #e0f2f1; color: #00695c; padding: 10px 14px;
+  text-align: left; font-weight: 700; font-size: .8rem;
+  text-transform: uppercase; letter-spacing: .4px;
+}
+td { padding: 11px 14px; border-bottom: 1px solid #f7f7f7; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: #f8fffe; }
+
+/* ── Badges ──────────────────────────────────────────────────────────────── */
+.badge {
+  display: inline-block; padding: 3px 10px;
+  border-radius: 20px; font-weight: 700; font-size: .8rem;
+}
+.badge-waiting     { background: #fff8e1; color: #e65100; }
+.badge-in-progress { background: #e3f2fd; color: #0d47a1; }
+.badge-completed   { background: #e8f5e9; color: #1b5e20; }
+.badge-cancelled   { background: #ffebee; color: #b71c1c; }
+.badge-available   { background: #e8f5e9; color: #1b5e20; }
+.badge-unavailable { background: #ffebee; color: #b71c1c; }
+
+/* ── Token card ──────────────────────────────────────────────────────────── */
+.token-number {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: linear-gradient(135deg, #00897b, #00695c);
+  color: white; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; flex-shrink: 0;
+}
+.token-number .num   { font-size: 1.8rem; font-weight: 900; line-height: 1; }
+.token-number .label { font-size: .6rem; text-transform: uppercase; opacity: .85; }
+
+/* ── Stats ───────────────────────────────────────────────────────────────── */
+.stats-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 14px; margin-bottom: 20px;
+}
+.stat-card {
+  background: white; border-radius: 10px; padding: 18px 16px;
+  text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,.07);
+}
+.stat-value { font-size: 1.9rem; font-weight: 800; color: #00695c; line-height: 1; }
+.stat-label { font-size: .78rem; color: #9e9e9e; margin-top: 5px; font-weight: 500; text-transform: uppercase; }
+
+/* ── Alerts ──────────────────────────────────────────────────────────────── */
+.alert {
+  padding: 10px 14px; border-radius: 8px; margin-bottom: 14px;
+  font-size: .875rem; font-weight: 500; display: flex; align-items: center; gap: 8px;
+}
+.alert-success { background: #e8f5e9; color: #1b5e20; border: 1px solid #a5d6a7; }
+.alert-error   { background: #ffebee; color: #b71c1c; border: 1px solid #ef9a9a; }
+
+/* ── Progress bar ────────────────────────────────────────────────────────── */
+.progress-bar { height: 8px; background: #e0f2f1; border-radius: 4px; overflow: hidden; }
+.progress-fill { height: 100%; background: #00897b; border-radius: 4px; transition: width .4s ease; }
+
+/* ── Misc ────────────────────────────────────────────────────────────────── */
+.loading { text-align: center; padding: 48px; color: #aaa; }
+.empty   { text-align: center; padding: 32px; color: #bbb; font-style: italic; }
+
+@media (max-width: 640px) {
+  .form-row, .form-row-3 { grid-template-columns: 1fr; }
+  .login-card { width: 95%; padding: 28px 20px; }
+  .stats-grid { grid-template-columns: 1fr 1fr; }
+}
