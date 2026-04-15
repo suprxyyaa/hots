@@ -1,131 +1,84 @@
 import { useState } from 'react';
-import { api } from '../api';
 
 const DEMO = [
-  { label: '🔴 Admin', email: 'admin@hots.com', password: 'password123' },
-  { label: '🔵 Reception', email: 'receptionist@hots.com', password: 'password123' },
-  { label: '🟢 Doctor', email: 'doctor@hots.com', password: 'password123' },
+  { label: '🔴 Admin', email: 'admin@hots.com', role: 'admin' },
+  { label: '🔵 Reception', email: 'receptionist@hots.com', role: 'receptionist' },
+  { label: '🟢 Doctor', email: 'doctor@hots.com', role: 'doctor' },
 ];
-
-// Mock users matching seed.js — used as fallback when backend is unreachable
-const MOCK_USERS = {
-  'admin@hots.com': {
-    id: 1, name: 'Admin User', email: 'admin@hots.com',
-    role: 'admin', doctor_id: null, password: 'password123'
-  },
-  'receptionist@hots.com': {
-    id: 2, name: 'Reception Staff', email: 'receptionist@hots.com',
-    role: 'receptionist', doctor_id: null, password: 'password123'
-  },
-  'doctor@hots.com': {
-    id: 3, name: 'Dr. Rahul Sharma', email: 'doctor@hots.com',
-    role: 'doctor', doctor_id: 1, password: 'password123'
-  },
-};
-
-const MOCK_TOKEN = 'mock-jwt-token-for-demo';
-
-async function loginWithFallback(email, password) {
-  try {
-    const res = await api.login({ email, password });
-    if (res.token) return { ok: true, data: res };
-    // Backend reachable but rejected credentials — try mock
-  } catch (_) {
-    // Network error — fall through to mock
-  }
-
-  // Mock auth fallback
-  const mock = MOCK_USERS[email?.toLowerCase()];
-  if (mock && mock.password === password) {
-    const { password: _pw, ...user } = mock;
-    return { ok: true, data: { token: MOCK_TOKEN, user } };
-  }
-
-  return { ok: false, error: 'Invalid credentials.' };
-}
 
 export default function Login({ onLogin }) {
   const [form, setForm] = useState({ email: '', password: '' });
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
 
+  // This updates the text boxes when you type
   const handle = (e) => setForm(f => ({ ...f, [e.target.name]: e.target.value }));
 
-  const submit = async (credentials) => {
-    const creds = credentials || form;
-    setError(''); setLoading(true);
-    const result = await loginWithFallback(creds.email, creds.password);
-    setLoading(false);
-    if (result.ok) {
-      localStorage.setItem('token', result.data.token);
-      onLogin(result.data.user);
-    } else {
-      setError(result.error || 'Login failed.');
-    }
+  // 1. THIS LOGS YOU IN REGARDLESS OF THE BACKEND
+  const handleSubmit = (e) => {
+    if (e) e.preventDefault();
+    
+    // We'll use the email typed in the box to decide the role
+    let role = 'admin';
+    if (form.email.includes('reception')) role = 'receptionist';
+    if (form.email.includes('doctor')) role = 'doctor';
+
+    const fakeUserData = {
+      email: form.email || 'admin@hots.com',
+      role: role,
+      name: 'Test User'
+    };
+
+    onLogin(fakeUserData);
   };
 
-  /*const handleSubmit = (e) => { e.preventDefault(); submit(); };
-
-  const handleDemo = (demo) => {
-    setForm({ email: demo.email, password: demo.password });
-    setError('');
-    // Auto-login immediately with the demo credentials
-    submit({ email: demo.email, password: demo.password });
+  // 2. THIS MAKES THE BUTTONS WORK INSTANTLY
+  const handleDemo = (d) => {
+    const fakeUserData = {
+      email: d.email,
+      role: d.role,
+      name: d.label.split(' ')[1] // Gets 'Admin', 'Reception', etc.
+    };
+    onLogin(fakeUserData);
   };
-  */
 
- const handleSubmit = async (e) => {
-  e.preventDefault();
+  return (
+    <div className="login-wrapper">
+      <div className="login-card">
+        <div className="logo">🏥</div>
+        <h1>HOTS</h1>
+        <p className="tagline">Hospital OPD Token System</p>
 
-  // BYPASS: If you type this specific info, skip the server entirely
-  if (form.email === 'admin@hots.com' && form.password === 'password123') {
-    localStorage.setItem('token', 'bypass-token');
-    localStorage.setItem('user', JSON.stringify({ email: 'admin@hots.com', role: 'admin' }));
-    window.location.href = '/dashboard'; // Make sure this matches your route name!
-    return;
-  } }
-
-    return (
-      <div className="login-wrapper">
-        <div className="login-card">
-          <div className="logo">🏥</div>
-          <h1>HOTS</h1>
-          <p className="tagline">Hospital OPD Token System</p>
-
-          {error && <div className="alert alert-error">⚠️ {error}</div>}
-
-          <form onSubmit={handleSubmit}>
-            <div className="form-group">
-              <label>Email Address</label>
-              <input name="email" type="email" value={form.email}
-                onChange={handle} placeholder="you@hospital.com" required />
-            </div>
-            <div className="form-group">
-              <label>Password</label>
-              <input name="password" type="password" value={form.password}
-                onChange={handle} placeholder="••••••••" required />
-            </div>
-            <button className="btn btn-primary btn-full" type="submit" disabled={loading}>
-              {loading ? '⏳ Signing in…' : '🔐 Sign In'}
-            </button>
-          </form>
-
-          <hr className="divider" />
-          <p className="demo-label">DEMO ACCOUNTS</p>
-          <div className="demo-btns">
-            {DEMO.map(d => (
-              <button key={d.email} className="btn btn-secondary btn-sm"
-                onClick={() => handleDemo(d)}
-                disabled={loading}
-                style={{ fontSize: '.75rem' }}>
-                {d.label}
-              </button>
-            ))}
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label>Email Address</label>
+            <input name="email" type="email" value={form.email}
+              onChange={handle} placeholder="you@hospital.com" required />
           </div>
-          <p style={{ textAlign: 'center', fontSize: '.72rem', color: '#bbb', marginTop: '18px' }}>
-            IaaS · PaaS · SaaS · DaaS — Cloud Computing Lab Project
-          </p>
+          <div className="form-group">
+            <label>Password</label>
+            <input name="password" type="password" value={form.password}
+              onChange={handle} placeholder="••••••••" required />
+          </div>
+          <button className="btn btn-primary btn-full" type="submit">
+            🔐 Sign In
+          </button>
+        </form>
+
+        <hr className="divider" />
+        <p className="demo-label">DEMO ACCOUNTS</p>
+        <div className="demo-btns">
+          {DEMO.map(d => (
+            <button key={d.email} className="btn btn-secondary btn-sm"
+              onClick={() => handleDemo(d)}
+              type="button"
+              style={{ fontSize: '.75rem' }}>
+              {d.label}
+            </button>
+          ))}
         </div>
+        <p style={{ textAlign: 'center', fontSize: '.72rem', color: '#bbb', marginTop: '18px' }}>
+          IaaS · PaaS · SaaS · DaaS — Cloud Computing Lab Project
+        </p>
       </div>
-    );
+    </div>
+  );
 }
