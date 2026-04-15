@@ -11,33 +11,35 @@ export default function Login({ onLogin }) {
 
   // This updates the text boxes when you type
   const handle = (e) => setForm(f => ({ ...f, [e.target.name]: e.target.value }));
-
-  // 1. THIS LOGS YOU IN REGARDLESS OF THE BACKEND
+// This handles the manual "Sign In" button
   const handleSubmit = (e) => {
     if (e) e.preventDefault();
-    
-    // We'll use the email typed in the box to decide the role
+
+    // Determine role based on email typed
     let role = 'admin';
-    if (form.email.includes('reception')) role = 'receptionist';
+    if (form.email.includes('receptionist')) role = 'receptionist';
     if (form.email.includes('doctor')) role = 'doctor';
 
     const fakeUserData = {
       email: form.email || 'admin@hots.com',
       role: role,
-      name: 'Test User'
+      name: role.charAt(0).toUpperCase() + role.slice(1) + ' User'
     };
 
     onLogin(fakeUserData);
   };
 
-  // 2. THIS MAKES THE BUTTONS WORK INSTANTLY
+  // This handles the 3 colored Demo buttons
   const handleDemo = (d) => {
-    const fakeUserData = {
+    // Standardize role names to match your App.jsx logic
+    let role = d.label.toLowerCase().includes('admin') ? 'admin' : 
+               d.label.toLowerCase().includes('reception') ? 'receptionist' : 'doctor';
+
+    onLogin({
       email: d.email,
-      role: d.role,
-      name: d.label.split(' ')[1] // Gets 'Admin', 'Reception', etc.
-    };
-    onLogin(fakeUserData);
+      role: role,
+      name: d.label
+    });
   };
 
   return (
