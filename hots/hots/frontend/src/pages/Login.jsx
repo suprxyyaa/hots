@@ -73,27 +73,17 @@ export default function Login({ onLogin }) {
     submit({ email: demo.email, password: demo.password });
   };
   */
-alert("Sending: " + form.email + " and " + form.password);
-  const handleSubmit = async (e) => {
-    e.preventDefault();
 
-    // LOG THE DATA: Check your console to see what is actually being sent
-    console.log("Attempting login with:", form.email, form.password);
+ const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    // BYPASS LOGIC: If the email matches the admin demo, just log in manually
-    if (form.email === 'admin@hots.com' && form.password === 'password123') {
-      const mockResponse = {
-        token: 'manual-bypass-token',
-        user: { email: 'admin@hots.com', role: 'admin' }
-      };
-
-      localStorage.setItem('token', mockResponse.token);
-      localStorage.setItem('user', JSON.stringify(mockResponse.user));
-
-      // Use whatever navigation your app uses (Navigate or window.location)
-      window.location.href = '/dashboard';
-      return;
-    }};
+  // BYPASS: If you type this specific info, skip the server entirely
+  if (form.email === 'admin@hots.com' && form.password === 'password123') {
+    localStorage.setItem('token', 'bypass-token');
+    localStorage.setItem('user', JSON.stringify({ email: 'admin@hots.com', role: 'admin' }));
+    window.location.href = '/dashboard'; // Make sure this matches your route name!
+    return;
+  } }
 
     return (
       <div className="login-wrapper">
@@ -138,4 +128,4 @@ alert("Sending: " + form.email + " and " + form.password);
         </div>
       </div>
     );
-  }
+}
